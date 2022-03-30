@@ -1,0 +1,54 @@
+Remove["Global'*"]
+
+F[x_,y_,u_,v_w_]:=x^3+y^3+u*x*y+v*x+w*y
+
+Plot3D[F[x,y,u,v,w]/.{u->0,v->1,w->1},{x,-10,10},{y,-10,10},BoxRatios->{1,1,1}];
+
+Plot3D[F[x,y,u,v,w]/.{u->5,v->1,m->1},{x,-4,4},{y,-4,4},BoxRatios->{1,1,1}];
+
+Jacobi[functions_List, variables_List]:= Outer[D, functions, variables]
+
+gradf
+
+H[s_,var_List]:=Map[D[Map[D[S,#]&,var],#]&,var]
+
+Hesse=H[F[x,y,u,v,w],{x,y}];
+Hesse//MatrixForm
+
+dethesse=Det[Hesse]
+
+ausgCP=solve[{gradf=={0,0},dethesse=0},{u,v,w}]
+
+{u1,v1,w1}={u,v,w}/.ausgCP[[1]]
+
+{u2,v2,w2}={u,v,w}/.ausgCP[[2]]
+
+B1=ParametricPlot3D[{u1,v1,w1}, {x,0,0,1}, {y,0,0,1},
+    ViewPoint->{-2.399, -2.053, 1.434}, BoxRatios->{1,1,1},
+    PlotRange->{{-0.1,0.1},{-0.1,0.1},{-0.1,0.1}}];
+
+B2=ParametricPlot3D[{u2,v2,w2}, {x,0,0,1}, {y,0,0,1},
+    ViewPoint->{-2.399, -2.053, 1.434}, BoxRatios->{1,1,1},
+    PlotRange->{{-0.1,0.1},{-0.1,0.1},{-0.1,0.1}}];
+
+Show[B1,B2,ViewPoint->{-3,1,1},BoxRatios->{1,1,1},
+    ColorOutput->CMYKColor;Boxed->True];
+
+B3=ParametricPlot3D[{u1,v1,w1}, {x,-0.1,0}, {y,-0.1,0},
+    ViewPoint->{-2.399, -2.053, 1.434}, BoxRatios->{1,1,1},
+    PlotRange->{{-0.1,0.1},{-0.1,0.1},{-0.1,0.1}}];
+
+ B4=ParametricPlot3D[{u2,v2,w2}, {x,-0.1,0}, {y,-0.1,0},
+    ViewPoint->{-2.399, -2.053, 1.434}, BoxRatios->{1,1,1},
+    PlotRange->{{-0.1,0.1},{-0.1,0.1},{-0.1,0.1}}];  
+
+Show[B3,B4,ViewPoint->{-3,1,1},BoxRatios->{1,1,1},
+    ColorOutput->CMYKColor;Boxed->True];
+
+
+Show[B1,B2,B3,B4,ViewPoint->{-3,1,1},BoxRatios->{1,1,1},
+    ColorOutput->CMYKColor;Boxed->True];
+
+
+
+
