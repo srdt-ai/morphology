@@ -1,0 +1,48 @@
+Remove["Global'*"]
+
+F[x_,u_]:=x^3+u x
+
+F[x,u]
+
+D1F[x_,u_]:= Evaluate [D[F[x,u],x]]
+
+D1F[x,u]
+
+D2F[x_,u_]:= Evaluate [D[D1F[x,u],x]]
+
+D2F[x,u]
+
+Foldsurface = Plot3D[F[x,u], {x,-2,2},{x,-2,1.5}, AspecRatio ->2,
+              BoxRatios -> {1,1,2}, Boxed -> False, PlotPoints -> 30,
+              ViewPoint -> {1.3,-2.4,2.}, Mesh -> true, AxesLabel -> {"x", "u", "F"},
+              HiddenSurface -> True];
+
+SingularPoints=Solve[D1F[x,u]==0,{u}]//Flatten
+
+s=u/.SingularPoints
+
+F[x,s]
+
+SP=ParametricPlot3D [{x,s,F[x,s], {Thickness[0.008], RGBColor[1,0,0]}}, {x,-1,1}];
+
+Projection = ParametricPlot3D [{x, s, -8, {Thickness[0.008], RGBColor[1,0,0]}}, {x,-1,1}];
+
+epsilon=0.01;
+
+SPvisible = ParametricPlot3D [{x,s,F[x,s] + epsilon, {Thickness[0.008], RGBColor[1,0,0]}}, {x,-1,1}, DisplayFunction -> Identity];
+
+Projectionontou = ParametricPlot3D [{o, s, -8, {Thickness[0.008], RGBColor[1,0,0]}}, {x,-1,1}, DisplayFunction -> Identity];
+
+catastbegin = Graphics3D[{RGBColor[1,0,0], PointSize[0.03], Point [{0, 0, -8}]}];
+
+<<Graphics 'PlotField3D'
+
+vlist = {{{0,0,-8}, {1,0,0}}, {{0,0,-8}, {0,1,0}},{{0,0,-8}, {0,0,1}}}
+
+across = ListPlotVectorField3D[ValidityState, VectorHeads -> False, ScaleFactor -> 3, Axes -> False, DisplayFunction -> Identity];
+
+Show[{Foldsurface, SPvisible, Projection, Projectionontou, catastbegin, across}, ViewPoint -> {1.3,-2.4, 2} ColorOutput -> CMYKColor];
+
+
+
+
